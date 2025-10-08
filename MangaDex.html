@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>MangáDex</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #111;
+      transition: background-color 1s ease;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      transition: opacity 0.5s ease, transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .container.fade-out {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .cover:hover {
+      transform: scale(1.03);
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .author {
+      font-size: 16px;
+      font-style: italic;
+      margin-bottom: 15px;
+      opacity: 0.8;
+    }
+
+    .description {
+      font-size: 15px;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 18px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Estilos de botão por mangá */
+    .punpun-btn {
+      background-color: #ccff14;
+    }
+    .punpun-btn:hover {
+      background-color: #d5ff3c;
+    }
+
+    .vagabond-btn {
+      background-color: #34495e;
+    }
+    .vagabond-btn:hover {
+      background-color: #3f5c78;
+    }
+
+    .chainsaw-btn {
+      background-color: #c0392b;
+    }
+    .chainsaw-btn:hover {
+      background-color: #e74c3c;
+    }
+
+    .gachiakuta-btn {
+      background-color: #222831;
+    }
+    .gachiakuta-btn:hover {
+      background-color: #393e46;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="manga-container">
+    <img id="cover" class="cover" src="" alt="Capa do Mangá">
+    <div id="title" class="title">Título do Mangá</div>
+    <div id="author" class="author">Autor</div>
+    <div id="description" class="description">Descrição do mangá...</div>
+
+    <div class="buttons">
+      <button id="prev-btn">◀ Anterior</button>
+      <button id="next-btn">Próximo ▶</button>
+    </div>
+  </div>
+
+  <script>
+    const mangas = [
+      {
+        title: "Boa Noite Punpun",
+        author: "Inio Asano",
+        description: "Acompanhe a vida de Punpun Punyama enquanto ele enfrenta os desafios da adolescência, da família e da saúde mental em um mundo cru e realista.",
+        cover: "https://m.media-amazon.com/images/I/917IJDfk36L.jpg",
+        color: "#2c3e50",
+        btnClass: "punpun-btn"
+      },
+      {
+        title: "Vagabond",
+        author: "Takehiko Inoue",
+        description: "A jornada de Miyamoto Musashi em sua busca por se tornar o maior espadachim do Japão feudal.",
+        cover: "https://m.media-amazon.com/images/I/81Lqtk2699L._UF1000,1000_QL80_.jpg",
+        color: "#3f5c78",
+        btnClass: "vagabond-btn"
+      },
+      {
+        title: "Chainsaw Man",
+        author: "Tatsuki Fujimoto",
+        description: "Denji, um jovem caçador de demônios com uma serra elétrica no lugar da cabeça, enfrenta criaturas bizarras e dilemas existenciais.",
+        cover: "https://upload.wikimedia.org/wikipedia/en/2/24/Chainsawman.jpg",
+        color: "#4e0d0d",
+        btnClass: "chainsaw-btn"
+      },
+      {
+        title: "Gachiakuta",
+        author: "Kei Urana",
+        description: "No mundo dos 'Descartados', um jovem busca redenção e vingança em meio ao caos e à sujeira do submundo.",
+        cover: "https://m.media-amazon.com/images/I/91UbyqB3M1L._UF1000,1000_QL80_.jpg",
+        color: "#1a1a1d",
+        btnClass: "gachiakuta-btn"
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function displayManga(index) {
+      const manga = mangas[index];
+      const container = document.getElementById('manga-container');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+
+      // Fade out
+      container.classList.add('fade-out');
+
+      setTimeout(() => {
+        // Atualizar conteúdo
+        document.getElementById('title').textContent = manga.title;
+        document.getElementById('author').textContent = `Autor: ${manga.author}`;
+        document.getElementById('description').textContent = manga.description;
+        document.getElementById('cover').src = manga.cover;
+        document.body.style.backgroundColor = manga.color;
+
+        // Resetar classes antigas
+        prevBtn.className = '';
+        nextBtn.className = '';
+
+        // Aplicar novas classes
+        prevBtn.classList.add(manga.btnClass);
+        nextBtn.classList.add(manga.btnClass);
+
+        // Fade in
+        container.classList.remove('fade-out');
+      }, 400);
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % mangas.length;
+      displayManga(currentIndex);
+    }
+
+    function showPrevious() {
+      currentIndex = (currentIndex - 1 + mangas.length) % mangas.length;
+      displayManga(currentIndex);
+    }
+
+    // Inicializar
+    window.onload = () => {
+      displayManga(currentIndex);
+
+      document.getElementById('prev-btn').onclick = showPrevious;
+      document.getElementById('next-btn').onclick = showNext;
+    };
+  </script>
+</body>
+</html>
