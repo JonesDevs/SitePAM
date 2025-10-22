@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>História do Mangá</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #111;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: background-color 1s ease;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .cover:hover {
+      transform: scale(1.03);
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .author {
+      font-size: 16px;
+      font-style: italic;
+      margin-bottom: 15px;
+      opacity: 0.8;
+    }
+
+    .description {
+      font-size: 15px;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    #back-btn {
+      padding: 12px 20px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #back-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Estilos dos botões por mangá */
+    .punpun-btn {
+      background-color: #92b60f;
+    }
+    .punpun-btn:hover {
+      background-color: #6c8515;
+    }
+
+    .vagabond-btn {
+      background-color: #34495e;
+    }
+    .vagabond-btn:hover {
+      background-color: #3f5c78;
+    }
+
+    .chainsaw-btn {
+      background-color: #c0392b;
+    }
+    .chainsaw-btn:hover {
+      background-color: #e74c3c;
+    }
+
+    .gachiakuta-btn {
+      background-color: #412913;
+    }
+    .gachiakuta-btn:hover {
+      background-color: #301c0a;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="manga-container">
+    <img id="cover" class="cover" src="" alt="Capa do Mangá" />
+    <div id="title" class="title">Título do Mangá</div>
+    <div id="author" class="author">Autor</div>
+    <div id="description" class="description">Descrição completa da história...</div>
+    <button id="back-btn">◀ Voltar</button>
+  </div>
+
+  <script>
+    const mangas = {
+      "Boa Noite Punpun": {
+        title: "Boa Noite Punpun",
+        author: "Inio Asano",
+        description: "Punpun Punyama é um garoto comum lidando com as dificuldades da adolescência, família e saúde mental. A obra é uma montanha-russa emocional, cheia de dor, esperança e existencialismo em um mundo realista e brutal.",
+        cover: "https://m.media-amazon.com/images/I/917IJDfk36L.jpg",
+        color: "#92b60f",
+        btnClass: "punpun-btn"
+      },
+      "Vagabond": {
+        title: "Vagabond",
+        author: "Takehiko Inoue",
+        description: "Inspirado na vida de Miyamoto Musashi, Vagabond retrata sua jornada como um samurai buscando não apenas força física, mas sabedoria e iluminação em um Japão feudal cheio de honra, guerra e filosofia.",
+        cover: "https://m.media-amazon.com/images/I/81Lqtk2699L._UF1000,1000_QL80_.jpg",
+        color: "#3f5c78",
+        btnClass: "vagabond-btn"
+      },
+      "Chainsaw Man": {
+        title: "Chainsaw Man",
+        author: "Tatsuki Fujimoto",
+        description: "Denji é um jovem com dívidas até o pescoço que vira um híbrido de humano e demônio motosserra. Em um mundo bizarro e violento, ele busca coisas simples: comida, abrigo e afeto. Mas nada é simples nesse universo caótico.",
+        cover: "https://upload.wikimedia.org/wikipedia/en/2/24/Chainsawman.jpg",
+        color: "#4e0d0d",
+        btnClass: "chainsaw-btn"
+      },
+      "Gachiakuta": {
+        title: "Gachiakuta",
+        author: "Kei Urana",
+        description: "No mundo dos 'Descartados', onde os rejeitados da sociedade são enviados, Rudo é acusado injustamente de assassinato. Em meio a lixo e caos, ele busca vingança e redenção, enfrentando monstros e segredos sombrios.",
+        cover: "https://m.media-amazon.com/images/I/91UbyqB3M1L._UF1000,1000_QL80_.jpg",
+        color: "#412913",
+        btnClass: "gachiakuta-btn"
+      }
+    };
+
+    // Função para pegar o parâmetro da URL
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const titulo = decodeURIComponent(getQueryParam('title') || '');
+    const backBtn = document.getElementById('back-btn');
+
+    if (titulo && mangas[titulo]) {
+      const manga = mangas[titulo];
+      document.getElementById('title').textContent = manga.title;
+      document.getElementById('author').textContent = `Autor: ${manga.author}`;
+      document.getElementById('description').textContent = manga.description;
+      document.getElementById('cover').src = manga.cover;
+      document.body.style.backgroundColor = manga.color;
+
+      // Adiciona a classe correta no botão
+      backBtn.classList.add(manga.btnClass);
+      backBtn.onclick = () => {
+        window.location.href = 'MangaDex.html'; // ou 'seu_arquivo_principal.html'
+      };
+    } else {
+      document.getElementById('title').textContent = "Mangá não encontrado";
+      document.getElementById('author').style.display = "none";
+      document.getElementById('description').textContent = "A história solicitada não foi encontrada.";
+      document.getElementById('cover').style.display = "none";
+
+      backBtn.onclick = () => {
+        window.location.href = 'MangaDex.html';
+      };
+    }
+  </script>
+</body>
+</html>
